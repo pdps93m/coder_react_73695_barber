@@ -1,12 +1,15 @@
 import React from "react";
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react';
 import NavBar from "./components/NavBar";
+import ItemListContainer from "./components/ItemListContainer";
+import CartWidget from "./components/CartWidget";
 
 const App = () => {
   return (
-   <ChakraProvider>
-     <NavBar/>
-   </ChakraProvider>
+      <ChakraProvider>
+          <NavBar />
+          <ItemListContainer greeting="¡Bienvenido a Giordano Barber Shopp!" />
+      </ChakraProvider>
   );
 };
 
