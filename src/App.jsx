@@ -2,29 +2,26 @@ import React from "react";
 import { ChakraProvider } from '@chakra-ui/react';
 import NavBar from "./components/NavBar";
 import ItemListContainer from "./components/ItemListContainer";
-import CartWidget from "./components/CartWidget";
+import { Routes, Route } from "react-router-dom";
+import ItemDetailContainer from "./components/ItemDetailContainer";
+import products from "./products"; 
 
 const App = () => {
   return (
-      <ChakraProvider>
-          <NavBar />
-          <ItemListContainer greeting="¡Bienvenido a Giordano Barber Shopp!" />
-      </ChakraProvider>
+    <ChakraProvider>
+      <NavBar />
+      <Routes>
+        {/* Catálogo general */}
+        <Route path="./components/ItemListContainer" element={<ItemListContainer greeting="Bienvenido a nuestra tienda" />} />
+        {/* Catálogo filtrado por categoría */}
+        <Route path="/categoria/:categoryId" element={<ItemListContainer />} />
+        {/* Detalle de producto */}
+        <Route path="/item/:itemId" element={<ItemDetailContainer />} />
+        {/* Ruta 404 */}
+        <Route path="*" element={<h2>Página no encontrada</h2>} />
+      </Routes>
+    </ChakraProvider>
   );
 };
-
-/*function MyButton() { //aca debajo la funcion del button 
-}
-
-O sino como el profe dice que es mas simple con funcion flecha
-const MyButton = () => {
-  return (
-    <button>Click me!</button>
-  );
-}
- fin del ejemplo con funcion flecha */
-
-
-
 
 export default App;
