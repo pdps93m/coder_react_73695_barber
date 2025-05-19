@@ -1,27 +1,42 @@
-import { useState } from "react";
-import { Button, Flex } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import categories from "../products";
+import ItemCount from "./ItemCount";
 
-const ItemCount = ({ stock = 10, initial = 1, onAdd }) => {
-  const [count, setCount] = useState(initial);
+const ItemDetailContainer = () => {
+  const { itemId } = useParams();
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleDecrement = () => {
-    if (count > 1) setCount(count - 1);
-  };
+  useEffect(() => {
+    setLoading(true);
+    new Promise((resolve) => {
+      setTimeout(() => {
+        let found = null;
+        for (const cat of categories) {
+          found = cat.products.find(prod => prod.id === Number(itemId));
+          if (found) break;
+        }
+        resolve(found);
+      }, 1000);
+    }).then((data) => {
+      setItem(data);
+      setLoading(false);
+    });
+  }, [itemId]);
 
-  const handleIncrement = () => {
-    if (count < stock) setCount(count + 1);
-  };
+  if (loading) return <div style={{ padding: "20px", textAlign: "center" }}><p>Cargando detalle...</p></div>;
+  if (!item) return <div style={{ padding: "20px", textAlign: "center" }}><p>Producto no encontrado</p></div>;
 
   return (
-    <Flex alignItems="center" gap="10px" justifyContent="center" mt={4}>
-      <Button onClick={handleDecrement} disabled={count <= 1}>-</Button>
-      <span>{count}</span>
-      <Button onClick={handleIncrement} disabled={count >= stock}>+</Button>
-      <Button colorScheme="teal" onClick={() => onAdd(count)}>
-        Agregar al carrito
-      </Button>
-    </Flex>
+    <div style={{ padding: "20px", textAlign: "center" }}>
+      <h2>{item.name}</h2>
+      <img src={item.image} alt={item.name} style={{ maxWidth: "200px" }} />
+      <p>{item.description}</p>
+      <p><strong>Precio:</strong> ${item.price}</p>
+      <ItemCount product={item} stock={10} initial={1} />
+    </div>
   );
 };
 
-export default ItemCount;
+export default ItemDetailContainer;
