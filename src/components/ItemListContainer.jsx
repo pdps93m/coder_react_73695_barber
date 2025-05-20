@@ -9,6 +9,7 @@ const ItemListContainer = ({ greeting }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true; // Flag para saber si el componente sigue montado
     setLoading(true);
     new Promise((resolve) => {
       setTimeout(() => {
@@ -22,9 +23,12 @@ const ItemListContainer = ({ greeting }) => {
         }
       }, 1000);
     }).then((data) => {
-      setItems(data);
-      setLoading(false);
+      if (isMounted) {
+        setItems(data);
+        setLoading(false);
+      }
     });
+    return () => { isMounted = false; }; // Cleanup para evitar updates en componentes desmontados
   }, [categoryId]);
 
   return (
