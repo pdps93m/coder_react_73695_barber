@@ -12,7 +12,7 @@ const Cart = () => {
       <ul>
         {cart.map((prod, idx) => (
           <li key={idx}>
-            {prod.name} - Cantidad: {prod.quantity} - Precio: ${prod.price}
+            {prod.title} - Cantidad: {prod.quantity} - Precio: ${prod.price}
           </li>
         ))}
       </ul>
