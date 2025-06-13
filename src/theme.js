@@ -5,8 +5,7 @@ const theme = extendTheme({
     brand: {
       black: "#181818",
       white: "#FFFFFF",
-      gray: "#B0B0B0",
-      grayDark: "#444444",
+      gold: "#FFD700", // Solo para el carrito
     },
   },
   styles: {
@@ -17,9 +16,9 @@ const theme = extendTheme({
         fontFamily: "'Montserrat', sans-serif",
       },
       a: {
-        color: "brand.gray",
+        color: "brand.white",
         _hover: {
-          color: "brand.grayDark",
+          color: "brand.gold",
           textDecoration: "underline",
         },
       },
@@ -33,26 +32,39 @@ const theme = extendTheme({
       },
       variants: {
         solid: {
-          bg: "brand.gray",
+          bg: "brand.white",
           color: "brand.black",
           _hover: {
-            bg: "brand.grayDark",
+            bg: "brand.black",
             color: "brand.white",
+            border: "1px solid",
+            borderColor: "brand.white",
           },
         },
         outline: {
-          borderColor: "brand.gray",
-          color: "brand.gray",
+          borderColor: "brand.white",
+          color: "brand.white",
           _hover: {
-            bg: "brand.gray",
+            bg: "brand.white",
             color: "brand.black",
+          },
+        },
+        // Puedes agregar un botón especial para el carrito
+        cart: {
+          bg: "brand.gold",
+          color: "brand.black",
+          _hover: {
+            bg: "brand.white",
+            color: "brand.gold",
+            border: "1px solid",
+            borderColor: "brand.gold",
           },
         },
       },
     },
     Heading: {
       baseStyle: {
-        color: "brand.gray",
+        color: "brand.white",
         letterSpacing: "wide",
       },
     },
@@ -61,7 +73,7 @@ const theme = extendTheme({
         bg: "brand.black",
         color: "brand.white",
         border: "1px solid",
-        borderColor: "brand.gray",
+        borderColor: "brand.white",
         borderRadius: "lg",
         boxShadow: "lg",
       },

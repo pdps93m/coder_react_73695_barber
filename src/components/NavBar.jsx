@@ -1,5 +1,5 @@
-import { Box, Flex, Button } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Flex, Image, Button, Box } from "@chakra-ui/react";
+import { NavLink, Link } from "react-router-dom";
 import CartWidget from "./CartWidget";
 
 const category = [
@@ -9,43 +9,54 @@ const category = [
   { id: 4, slug: "productos-barberos", name: "Productos para Barberos" }
 ];
 
-const NavBar = () => {
-  return (
-    <Flex
-      alignItems="center"
-      justifyContent="space-between"
-      width="100%"
-      padding="0 25px"
-      height="60px"
-      backgroundColor="black"
-      color="white"
-    >
-      {/* Logo de la tienda */}
-      <Box fontSize="1.5rem" fontWeight="bold">
-        <img src="/src/assets/imagenes/logo_barber.pn" alt="Logo de la tienda" style={{ height: "40px" }} />
-      </Box>
+const NavBar = () => (
+  <Flex
+    alignItems="center"
+    justifyContent="space-between"
+    width="100%"
+    px={6}
+    py={3}
+    bg="brand.black"
+    borderBottom="1px solid"
+    borderColor="brand.white"
+  >
+    {/* Logo a la izquierda */}
+    <Link to="/">
+      <Image
+        src="/src/assets/imagenes/logo_barber.png"
+        alt="Logo Barbería"
+        boxSize="48px"
+        cursor="pointer"
+      />
+    </Link>
 
-      {/* Enlaces de navegación personalizados */}
-      <Flex gap="15px">
-        {category.map(cat => (
-          <Button
-            key={cat.id} // Usar id como key
-            as={Link}
-            to={`/categoria/${cat.slug}`} // Usar slug para la URL
-            variant="link"
-            color="white"
-            textTransform="capitalize"
-          >
-            {cat.name}
-          </Button>
-        ))}
-        <Button as={Link} to="/cart" colorScheme="teal">Carrito</Button>
-      </Flex>
-
-      {/* Widget del carrito */}
-      <CartWidget />
+    {/* Categorías al centro */}
+    <Flex gap={4}>
+      {category.map(cat => (
+        <Button
+          key={cat.id}
+          as={NavLink}
+          to={`/categoria/${cat.slug}`}
+          variant="link"
+          color="brand.white"
+          fontWeight="bold"
+          fontSize="lg"
+          _hover={{ color: "brand.gold" }}
+          textTransform="capitalize"
+        >
+          {cat.name}
+        </Button>
+      ))}
     </Flex>
-  );
-};
+
+    {/* Carrito a la derecha */}
+    <Box>
+      {/* El CartWidget debe estar dentro de un Link para navegar a /cart */}
+      <Link to="/cart">
+        <CartWidget />
+      </Link>
+    </Box>
+  </Flex>
+);
 
 export default NavBar;

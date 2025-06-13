@@ -1,12 +1,30 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
-import { RouterProvider } from "react-router-dom";
-import { router } from "./routes/index";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home";
+import ItemListContainer from "./components/ItemListContainer";
+import { CartProvider } from './context/CartContext';
+import Cart from "./components/Cart"; 
+import NotFound from "./pages/NotFound";
+
 
 const App = () => {
   return (
     <ChakraProvider theme={theme}>
-      <RouterProvider router={router} />
+      <CartProvider>
+        <Router>
+          {/* Barra superior única para toda la app */}
+          <NavBar />
+          {/* Contenido según la ruta */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/categoria/:categoryId" element={<ItemListContainer />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </CartProvider>
     </ChakraProvider>
   );
 };

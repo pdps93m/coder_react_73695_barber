@@ -1,29 +1,69 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-export const CartContext = createContext();
+const CartContext = createContext();
 
-const CartProvider = ({ children }) => {
+export const useCart = () => useContext(CartContext);
+
+export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (item, quantity) => {
-    setCart(prevCart => {
-      const existing = prevCart.find(prod => prod.id === item.id);
-      if (existing) {
-        return prevCart.map(prod =>
-          prod.id === item.id
-            ? { ...prod, quantity: prod.quantity + quantity }
-            : prod
-        );
+  // Agregar producto al carrito
+  const addToCart = (producto, cantidad = 1) => {
+    setCart(prev => {
+      const existe = prev.find(item => item.id === producto.id);
+      if (existe) {
+        // Si tiene stock, no superar el máximo
+        if (producto.stock) {
+          const nuevaCantidad = Math.min(existe.cantidad + cantidad, producto.stock);
+          return prev.map(item =>
+            item.id === producto.id
+              ? { ...item, cantidad: nuevaCantidad }
+              : item
+          );
+        } else {
+          // Si no tiene stock (ej: cortes), sumar sin límite
+          return prev.map(item =>
+            item.id === producto.id
+              ? { ...item, cantidad: item.cantidad + cantidad }
+              : item
+          );
+        }
+      } else {
+        return [...prev, { ...producto, cantidad }];
       }
-      return [...prevCart, { ...item, quantity }];
     });
   };
 
+  // Quitar producto del carrito
+  const removeFromCart = (id) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  };
+
+  // Cambiar cantidad de un producto
+  const updateQuantity = (id, cantidad) => {
+    setCart(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, cantidad: Math.max(1, cantidad) } : item
+      )
+    );
+  };
+
+  // Vaciar carrito
+  const clearCart = () => setCart([]);
+
+  // Calcular total
+  const total = cart.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+
   return (
-    <CartContext.Provider value={{ cart, addToCart }}>
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      total
+    }}>
       {children}
     </CartContext.Provider>
   );
 };
-
-export default CartProvider;
